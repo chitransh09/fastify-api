@@ -13,10 +13,14 @@ export type QueryType = {
 };
 
 export async function getFromFirestore(owneremail: string) {
-  const customCollectionRef = collection(db, "customLink");
+  const customLinkRef = db.collection("customLink");
+
   try {
-    const constraint = query(customCollectionRef, where("ownerEmail", "==", owneremail));
-    const response = await getDocs(constraint);
+    const response = await customLinkRef.where("ownerEmail", "==", owneremail).get();
+    if (response.empty) {
+      return { message: "No matching documents" };
+    }
+
     const data = response.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
     return data;
@@ -26,9 +30,11 @@ export async function getFromFirestore(owneremail: string) {
 }
 
 export async function sendToFirestore({ title, url, favIconUrl, ownerEmail }: DbDataType) {
-  const customCollectionRef = collection(db, "customLink");
+  const customLinkRef = db.collection("customLink");
+  const data = { title, url, favIconUrl, ownerEmail };
+
   try {
-    await addDoc(customCollectionRef, { title, url, favIconUrl, ownerEmail });
+    await customLinkRef.add(data);
     console.log("sent!");
   } catch (err) {
     console.log(err);

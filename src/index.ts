@@ -1,8 +1,10 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import swagger from "@fastify/swagger";
+import fastifyEnv from "@fastify/env";
 
 import loggerConfig from "./utils/logger";
+import envConfig from "./utils/env";
 import { swaggerConfig } from "./utils/swagger";
 import miscRoutes from "./modules/misc/misc.routes";
 import pragatiRoutes from "./modules/pragati/pragati.routes";
@@ -14,8 +16,11 @@ const fastify = Fastify({
 });
 
 // middlewares
-fastify.register(cors, { credentials: true, origin: "*" });
-fastify.register(swagger, swaggerConfig);
+async function loadMiddleware() {
+  await fastify.register(fastifyEnv, envConfig);
+  fastify.register(cors, { credentials: true, origin: "*" });
+  fastify.register(swagger, swaggerConfig);
+}
 
 // routes
 fastify.register(miscRoutes, { prefix: "/misc" });
@@ -24,6 +29,8 @@ fastify.register(pragatiRoutes, { prefix: "/pragati" });
 // Run the server!
 const start = async () => {
   try {
+    await loadMiddleware();
+    console.log("🚀🚀 the full env: ", process.env);
     await fastify.listen({ port: PORT, host: HOST });
     console.log(`listening on ${PORT}`);
   } catch (err) {

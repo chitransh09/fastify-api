@@ -1,23 +1,14 @@
-import { initializeApp, FirebaseApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { initializeApp, App, cert } from "firebase-admin/app";
+import { getFirestore } from "firebase-admin/firestore";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAjfowu4hV7rXUSXtMDy8bQ5guMbmXJffs",
-  authDomain: "pragati-e9374.firebaseapp.com",
-  databaseURL: "https://pragati-e9374-default-rtdb.firebaseio.com",
-  projectId: "pragati-e9374",
-  storageBucket: "pragati-e9374.appspot.com",
-  messagingSenderId: "480047018659",
-  appId: "1:480047018659:web:cc16433677bfde531d0516",
-  measurementId: "G-XJ68PS6HR0",
-};
+const serviceAccount = require("../../assets/serviceAccount.json");
 
-// Initialize Firebase
-let app: FirebaseApp;
 try {
-  app = initializeApp(firebaseConfig);
+  initializeApp({
+    credential: cert(serviceAccount),
+  });
 } catch (err) {
   console.log(err);
 }
 
-export const db = getFirestore(app!);
+export const db = getFirestore();
