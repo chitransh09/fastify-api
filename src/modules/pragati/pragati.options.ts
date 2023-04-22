@@ -1,3 +1,4 @@
+console.log("executing pragati.options.ts ");
 import { getFromDB, putIntoDB } from "./pragati.controllers";
 
 export const getFromFirestoreOptions = {

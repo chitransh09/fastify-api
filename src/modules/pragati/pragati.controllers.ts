@@ -1,3 +1,5 @@
+console.log("executing pragati.controllers.ts ");
+
 import { FastifyRequest, FastifyReply } from "fastify";
 
 import { getFromFirestore, sendToFirestore } from "./pragati.utils";

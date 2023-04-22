@@ -1,4 +1,6 @@
-export const swaggerConfig = {
+console.log("executing swagger.ts ");
+
+const swaggerConfig = {
   exposeRoute: true,
   routePrefix: "/docs",
   swagger: {
@@ -13,3 +15,5 @@ export const swaggerConfig = {
     produces: ["application/json"],
   },
 };
+
+export default swaggerConfig;

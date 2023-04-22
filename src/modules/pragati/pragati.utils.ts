@@ -1,4 +1,4 @@
-import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
+console.log("executing pragati.utils.ts ");
 
 import { db } from "../../utils/firebase";
 
