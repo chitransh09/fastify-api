@@ -5,7 +5,6 @@ import { getFirestore } from "firebase-admin/firestore";
 // const serviceAccount = require("../../assets/serviceAccount.json");
 console.log("starting to read env");
 const data = process.env.FIREBASE_SERVICE_KEY!;
-// console.log("🚀 ⚡ file: firebase.ts:6 ⚡ data:", data);
 const serviceAccount = Buffer.from(data, "base64").toString("utf8");
 
 try {

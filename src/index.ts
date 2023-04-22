@@ -3,14 +3,11 @@ import Fastify from "fastify";
 import dotenv from "dotenv";
 dotenv.config();
 console.log("dotenv configured!");
-console.log(process.env.watcha);
+console.log("watcha: ", process.env.watcha);
 
 import loggerConfig from "./utils/logger";
 import cors from "@fastify/cors";
 import swagger from "@fastify/swagger";
-// import fastifyEnv from "@fastify/env";
-
-// import envConfig from "./utils/env";
 import swaggerConfig from "./utils/swagger";
 
 import miscRoutes from "./modules/misc/misc.routes";
@@ -25,8 +22,6 @@ function buildServer() {
   });
 
   (async function loadMiddlewares() {
-    // await fastify.register(fastifyEnv, envConfig);
-    // console.log("env configured!");
     fastify.register(cors, { credentials: true, origin: "*" });
     fastify.register(swagger, swaggerConfig);
 
