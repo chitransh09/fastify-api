@@ -16,7 +16,7 @@ import swaggerConfig from "./utils/swagger";
 import miscRoutes from "./modules/misc/misc.routes";
 import pragatiRoutes from "./modules/pragati/pragati.routes";
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const HOST = "0.0.0.0";
 
 function buildServer() {
@@ -39,7 +39,7 @@ function buildServer() {
   const startServer = async () => {
     console.log("executing startServer");
     try {
-      await fastify.listen({ port: PORT, host: HOST });
+      await fastify.listen({ port: PORT as number });
       console.log(`listening on ${PORT}`);
     } catch (err) {
       fastify.log.error(err);
