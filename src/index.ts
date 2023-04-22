@@ -39,7 +39,7 @@ function buildServer() {
   const startServer = async () => {
     console.log("executing startServer");
     try {
-      await fastify.listen({ port: PORT as number });
+      await fastify.listen({ port: PORT as number, host: HOST });
       console.log(`listening on ${PORT}`);
     } catch (err) {
       fastify.log.error(err);
