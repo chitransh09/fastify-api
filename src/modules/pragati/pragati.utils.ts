@@ -40,3 +40,14 @@ export async function sendToFirestore({ title, url, favIconUrl, ownerEmail }: Db
     console.log(err);
   }
 }
+
+export async function deleteInFirestore(id: string) {
+  const customLinkRef = db.collection("customLink");
+
+  try {
+    await customLinkRef.doc(id).delete();
+    console.log("deleted!");
+  } catch (err) {
+    console.log(err);
+  }
+}

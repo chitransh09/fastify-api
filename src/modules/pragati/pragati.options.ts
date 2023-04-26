@@ -1,5 +1,5 @@
 console.log("executing pragati.options.ts ");
-import { getFromDB, putIntoDB } from "./pragati.controllers";
+import { delInDB, getFromDB, putIntoDB } from "./pragati.controllers";
 
 export const getFromFirestoreOptions = {
   schema: {
@@ -55,4 +55,25 @@ export const sendToFirestoreOptions = {
     },
   },
   handler: putIntoDB,
+};
+
+export const deleteInFirestoreOptions = {
+  schema: {
+    params: {
+      type: "object",
+      required: ["id"],
+      properties: {
+        id: { type: "string" },
+      },
+    },
+    response: {
+      201: {
+        type: "object",
+        properties: {
+          message: { type: "string" },
+        },
+      },
+    },
+  },
+  handler: delInDB,
 };
