@@ -12,6 +12,7 @@ import swaggerConfig from "./utils/swagger";
 
 import miscRoutes from "./modules/misc/misc.routes";
 import pragatiRoutes from "./modules/pragati/pragati.routes";
+import indexRouteOptions from "./utils/indexRouteOptions";
 
 const PORT = process.env.PORT || 3000;
 const HOST = "0.0.0.0";
@@ -26,6 +27,7 @@ function buildServer() {
     fastify.register(swagger, swaggerConfig);
 
     // routes
+    fastify.get("/", indexRouteOptions);
     fastify.register(miscRoutes, { prefix: "/misc" });
     fastify.register(pragatiRoutes, { prefix: "/pragati" });
   })();
