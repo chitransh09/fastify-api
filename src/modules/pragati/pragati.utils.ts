@@ -2,15 +2,24 @@ console.log("executing pragati.utils.ts ");
 
 import { db } from "../../utils/firebase";
 
+// ======================================
+
 export type DbDataType = {
   title: string;
   url: string;
   favIconUrl: string;
   ownerEmail: string;
 };
+export type DbFetchedDataType = DbDataType & { id: string };
 export type QueryType = {
   owneremail: string;
 };
+
+export function isDbDataTypeArray(arg: any): arg is DbDataType[] {
+  return arg && arg[0].title !== undefined;
+}
+
+// ======================================
 
 export async function getFromFirestore(owneremail: string) {
   const customLinkRef = db.collection("customLink");
@@ -21,7 +30,7 @@ export async function getFromFirestore(owneremail: string) {
       return { message: "No matching documents" };
     }
 
-    const data = response.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    const data = response.docs.map((doc) => ({ ...doc.data(), id: doc.id } as DbFetchedDataType));
 
     return data;
   } catch (err) {

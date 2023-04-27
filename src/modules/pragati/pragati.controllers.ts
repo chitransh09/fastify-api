@@ -2,8 +2,13 @@ console.log("executing pragati.controllers.ts ");
 
 import { FastifyRequest, FastifyReply } from "fastify";
 
-import { getFromFirestore, sendToFirestore, deleteInFirestore } from "./pragati.utils";
-import type { DbDataType, QueryType } from "./pragati.utils";
+import {
+  getFromFirestore,
+  sendToFirestore,
+  deleteInFirestore,
+  isDbDataTypeArray,
+} from "./pragati.utils";
+import type { DbDataType, DbFetchedDataType, QueryType } from "./pragati.utils";
 
 export async function getFromDB(
   req: FastifyRequest<{ Querystring: QueryType }>,
@@ -24,6 +29,15 @@ export async function putIntoDB(req: FastifyRequest<{ Body: DbDataType }>, reply
   const { title, url, favIconUrl, ownerEmail } = req.body;
 
   try {
+    const existingBookmarks = await getFromFirestore(ownerEmail);
+    if (!existingBookmarks) return reply.send({ message: "user not found" });
+
+    if (!isDbDataTypeArray(existingBookmarks)) return reply.send({ message: "user not found" });
+
+    if (existingBookmarks.some((bookmark) => bookmark.url === url)) {
+      return reply.send({ message: "bookmark already exists" });
+    }
+
     await sendToFirestore({ title, url, favIconUrl, ownerEmail });
     return reply.send({ message: "sent!" });
   } catch (err) {
