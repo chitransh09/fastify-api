@@ -3,12 +3,12 @@ console.log("executing pragati.controllers.ts ");
 import { FastifyRequest, FastifyReply } from "fastify";
 
 import {
-  getFromFirestore,
+  checkIfDocExistsInFirestore,
   sendToFirestore,
   deleteInFirestore,
-  isDbDataTypeArray,
+  getAllDocsFromFirestore,
 } from "./pragati.utils";
-import type { DbDataType, DbFetchedDataType, QueryType } from "./pragati.utils";
+import type { DbDataType, QueryType } from "./pragati.utils";
 
 export async function getFromDB(
   req: FastifyRequest<{ Querystring: QueryType }>,
@@ -17,7 +17,7 @@ export async function getFromDB(
   const { owneremail } = req.query;
 
   try {
-    const response = await getFromFirestore(owneremail);
+    const response = await getAllDocsFromFirestore(owneremail);
 
     return reply.send({ data: response });
   } catch (err) {
@@ -29,17 +29,13 @@ export async function putIntoDB(req: FastifyRequest<{ Body: DbDataType }>, reply
   const { title, url, favIconUrl, ownerEmail } = req.body;
 
   try {
-    const existingBookmarks = await getFromFirestore(ownerEmail);
-    if (!existingBookmarks) return reply.send({ message: "user not found" });
-
-    if (!isDbDataTypeArray(existingBookmarks)) return reply.send({ message: "user not found" });
-
-    if (existingBookmarks.some((bookmark) => bookmark.url === url)) {
+    const bookmarkExists = await checkIfDocExistsInFirestore(ownerEmail, title);
+    if (bookmarkExists) {
       return reply.send({ message: "bookmark already exists" });
+    } else {
+      await sendToFirestore({ title, url, favIconUrl, ownerEmail });
+      return reply.send({ message: "sent!" });
     }
-
-    await sendToFirestore({ title, url, favIconUrl, ownerEmail });
-    return reply.send({ message: "sent!" });
   } catch (err) {
     console.log(err);
   }
