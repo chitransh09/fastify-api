@@ -11,28 +11,40 @@ export type DbDataType = {
   ownerEmail: string;
 };
 export type DbFetchedDataType = DbDataType & { id: string };
+
 export type QueryType = {
   owneremail: string;
 };
 
-export function isDbDataTypeArray(arg: any): arg is DbDataType[] {
-  return arg && arg[0].title !== undefined;
-}
-
 // ======================================
 
-export async function getFromFirestore(owneremail: string) {
+export async function getAllDocsFromFirestore(owneremail: string) {
   const customLinkRef = db.collection("customLink");
 
   try {
     const response = await customLinkRef.where("ownerEmail", "==", owneremail).get();
     if (response.empty) {
-      return { message: "No matching documents" };
+      return [];
+    } else {
+      const data = response.docs.map((doc) => ({ ...doc.data(), id: doc.id } as DbFetchedDataType));
+
+      return data;
     }
+  } catch (err) {
+    console.log(err);
+  }
+}
 
-    const data = response.docs.map((doc) => ({ ...doc.data(), id: doc.id } as DbFetchedDataType));
+export async function checkIfDocExistsInFirestore(owneremail: string, title: string) {
+  const customLinkRef = db.collection("customLink");
 
-    return data;
+  try {
+    const response = await customLinkRef
+      .where("ownerEmail", "==", owneremail)
+      .where("title", "==", title)
+      .get();
+
+    return !response.empty;
   } catch (err) {
     console.log(err);
   }
