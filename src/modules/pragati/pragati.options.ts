@@ -59,9 +59,9 @@ export const sendToFirestoreOptions = {
 
 export const deleteInFirestoreOptions = {
   schema: {
-    params: {
+    Querystring: {
       type: "object",
-      required: ["id"],
+      required: ["owneremail", "title"],
       properties: {
         id: { type: "string" },
       },

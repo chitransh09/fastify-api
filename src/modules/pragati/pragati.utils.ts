@@ -62,11 +62,17 @@ export async function sendToFirestore({ title, url, favIconUrl, ownerEmail }: Db
   }
 }
 
-export async function deleteInFirestore(id: string) {
+export async function deleteInFirestore(owneremail: string, title: string) {
   const customLinkRef = db.collection("customLink");
 
   try {
-    await customLinkRef.doc(id).delete();
+    const deletedDoc = await customLinkRef
+      .where("ownerEmail", "==", owneremail)
+      .where("title", "==", title)
+      .get();
+
+    await customLinkRef.doc(deletedDoc.docs[0].id).delete();
+
     console.log("deleted!");
   } catch (err) {
     console.log(err);

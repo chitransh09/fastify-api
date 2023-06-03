@@ -11,7 +11,7 @@ function pragatiRoutes(fastify: FastifyInstance, options: FastifyPluginOptions, 
 
   fastify.post("/", sendToFirestoreOptions);
 
-  fastify.delete("/:id", deleteInFirestoreOptions);
+  fastify.delete("/", deleteInFirestoreOptions);
 
   done();
 }

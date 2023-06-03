@@ -42,13 +42,14 @@ export async function putIntoDB(req: FastifyRequest<{ Body: DbDataType }>, reply
 }
 
 export async function delInDB(
-  req: FastifyRequest<{ Params: { id: string } }>,
+  req: FastifyRequest<{ Querystring: { owneremail: string; title: string } }>,
   reply: FastifyReply
 ) {
-  const { id } = req.params;
+  const { owneremail, title } = req.query;
 
   try {
-    await deleteInFirestore(id);
+    await deleteInFirestore(owneremail, title);
+
     return reply.send({ message: "deleted!" });
   } catch (err) {
     console.log(err);
